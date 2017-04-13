@@ -32,7 +32,8 @@ def search(facet, query, **params):
     params['query'] = query
     url = '/'.join([BASE_URL, 'search', facet])
     response = requests.get(url, params=params)
-    if response.status_code == 200:
+    status_code = response.status_code
+    if status_code == 200:
         response = json.loads(response.content.decode(response.encoding))
         if response.get('results'):
             top_result = response['results'][0]
@@ -44,14 +45,15 @@ def search(facet, query, **params):
         'Error {}: failed to get results for query '
         '"search/{}&query={}"'
     )
-    print(message.format(response.status_code, facet, query), file=sys.stderr)
+    print(message.format(status_code, facet, query), file=sys.stderr)
 
 def credits(person_id, **params):
     """Generate a lits of combined TV/movie credits for a person ID"""
     # https://developers.themoviedb.org/3/people/get-person-combined-credits
     url = '/'.join([BASE_URL, 'person', str(person_id), 'combined_credits'])
     response = requests.get(url, params=params)
-    if response.status_code == 200:
+    status_code = response.status_code
+    if status_code == 200:
         response = json.loads(response.content.decode(response.encoding))
         for key in 'cast', 'crew':
             for credit in response[key]:
@@ -64,7 +66,7 @@ def credits(person_id, **params):
             'Error {}: failed to get credits for person ID '
             '"person/{}/combined_credits"'
         )
-        print(message.format(response.status_code, person_id), file=sys.stderr)
+        print(message.format(status_code, person_id), file=sys.stderr)
 
 def common_credits(*queries, **params):
     """Find the intersection of credits from a list of person queries"""
