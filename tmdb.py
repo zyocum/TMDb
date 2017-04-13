@@ -48,7 +48,7 @@ def search(facet, query, **params):
     print(message.format(status_code, facet, query), file=sys.stderr)
 
 def credits(person_id, **params):
-    """Generate a lits of combined TV/movie credits for a person ID"""
+    """Generate a list of combined TV/movie credits for a person ID"""
     # https://developers.themoviedb.org/3/people/get-person-combined-credits
     url = '/'.join([BASE_URL, 'person', str(person_id), 'combined_credits'])
     response = requests.get(url, params=params)

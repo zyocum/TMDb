@@ -1,4 +1,4 @@
-# Query The Movie Database (TMDb) for actors who worked on the same movies/shows
+# Search The Movie Database (TMDb) for common credits between cast/crew
 
 ## TMDb API
 This script relies on the [TMDb API](https://www.themoviedb.org), so if you don't have an account with TMDb, you need to create one and [request an API key](https://www.themoviedb.org/settings/api).
