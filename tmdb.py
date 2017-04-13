@@ -9,7 +9,6 @@ import sys
 import urllib
 
 from getpass import getpass
-from pprint import pprint
 
 KEY = os.environ.get('TMDB_USER_KEY')
 BASE_URL = 'https://api.themoviedb.org/3'
