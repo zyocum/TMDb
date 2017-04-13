@@ -6,17 +6,16 @@ This script relies on the [TMDb API](https://www.themoviedb.org), so if you don'
 ## Usage
 
 	./tmdb.py -h
-	usage: tmdb.py [-h] [-k API_KEY] queries [queries ...]
+	usage: tmdb.py [-h] [-k API_KEY] query [query ...]
 	
 	Search TMDb for common credits between cast/crew
 	
 	positional arguments:
-	  queries               Query strings
+	  query                 Names of persons to query
 	
 	optional arguments:
 	  -h, --help            show this help message and exit
 	  -k API_KEY, --api-key API_KEY
-
 
 **Note:** If you don't want to enter your API key every time, you can set a `TMDB_USER_KEY` environment variable and the script will use that instead:
 
