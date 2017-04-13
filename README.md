@@ -44,7 +44,7 @@ If you supply a single query you will get a complete credit list for that person
 
 If you supply multiple queries you will get credit results that all of those persons have in common:
 	
-	./tmdb.py 'Nathan Fillion' 'Gina Torres'
+	$ ./tmdb.py 'Nathan Fillion' 'Gina Torres'
 	{
 	    "persons": [
 	        "Gina Torres",
