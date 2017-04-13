@@ -3,6 +3,19 @@
 ## TMDb API
 This script relies on the [TMDb API](https://www.themoviedb.org), so if you don't have an account with TMDb, you need to create one and [request an API key](https://www.themoviedb.org/settings/api).
 
+## Install Requirements
+
+1. Set up a `virtualenv` (or if you don't mind installing dependencies globally skip to step 2):
+
+		$ python3 $(which virtualenv) .
+		$ source bin/activate
+
+2. Install the dependencies via `pip`:
+
+		(TMDb) $ pip3 install -r requirements.txt
+
+3. That's it!
+
 ## Usage
 
 	./tmdb.py -h
