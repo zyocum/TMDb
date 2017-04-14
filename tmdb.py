@@ -100,7 +100,7 @@ def common_credits(*queries, **params):
             'common_credits': sorted(common_credits)
         }
     else:
-        message = "No persons found with for names: {}"
+        message = "No persons found for names: {}"
         print(
             message.format('"{}"'.format('", "'.join(queries))),
             file=sys.stderr
