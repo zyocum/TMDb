@@ -34,18 +34,25 @@ def search(facet, query, **params):
     response = requests.get(url, params=params)
     status_code = response.status_code
     if status_code == 200:
-        response = json.loads(response.content.decode(response.encoding))
-        if response.get('results'):
-            top_result = response['results'][0]
-            return {
-                'id': top_result['id'],
-                'name': top_result['name']
-            }
-    message = (
-        'Error {}: failed to get results for query '
-        '"search/{}&query={}"'
-    )
-    print(message.format(status_code, facet, query), file=sys.stderr)
+        encoding = response.encoding or 'utf-8'
+        try:
+            response = json.loads(response.content.decode(encoding))
+            if response.get('results'):
+                top_result = response['results'][0]
+                return {
+                    'id': top_result['id'],
+                    'name': top_result['name']
+                }
+        except Exception as e:
+            print(e, file=sys.stderr)
+            print(response.content.decode(encoding), file=sys.stderr)
+    else:
+        message = '\n'.join([
+            'Error {}: failed to get results for query',
+            'URL: {}',
+            'parameters: {}'
+        ])
+        print(message.format(status_code, url, params), file=sys.stderr)
 
 def credits(person_id, **params):
     """Generate a list of combined TV/movie credits for a person ID"""
@@ -54,19 +61,25 @@ def credits(person_id, **params):
     response = requests.get(url, params=params)
     status_code = response.status_code
     if status_code == 200:
-        response = json.loads(response.content.decode(response.encoding))
-        for key in 'cast', 'crew':
-            for credit in response[key]:
-                yield {
-                    'title': (credit.get('title') or credit.get('name')),
-                    'id': credit['id']
-                }
+        encoding = response.encoding
+        try:
+            response = json.loads(response.content.decode(encoding))
+            for key in 'cast', 'crew':
+                for credit in response[key]:
+                    yield {
+                        'title': (credit.get('title') or credit.get('name')),
+                        'id': credit['id']
+                    }
+        except Exception as e:
+            print(e, file=sys.stderr)
+            print(response.content.decode(encoding), file=sys.stderr)
     else:
-        message = (
-            'Error {}: failed to get credits for person ID '
-            '"person/{}/combined_credits"'
-        )
-        print(message.format(status_code, person_id), file=sys.stderr)
+        message = '\n'.join([
+            'Error {}: failed to get credits for person ID'
+            'URL: {}',
+            'parameters: {}'
+        ])
+        print(message.format(status_code, url, params), file=sys.stderr)
 
 def common_credits(*queries, **params):
     """Find the intersection of credits from a list of person queries"""
@@ -78,13 +91,20 @@ def common_credits(*queries, **params):
                 c['title'] for c in credits(person['id'], **params)
             }
             persons[person['id']] = person
-    common_credits = set.intersection(
-        *(p['credits'] for p in persons.values())
-    )
-    return {
-        'persons': sorted(p['name'] for p in persons.values()),
-        'common_credits': sorted(common_credits)
-    }
+    if persons:
+        common_credits = set.intersection(
+            *(p['credits'] for p in persons.values())
+        )
+        return {
+            'persons': sorted(p['name'] for p in persons.values()),
+            'common_credits': sorted(common_credits)
+        }
+    else:
+        message = "No persons found with for names: {}"
+        print(
+            message.format('"{}"'.format('", "'.join(queries))),
+            file=sys.stderr
+        )
 
 if __name__ == '__main__':
     import argparse
